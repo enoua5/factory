@@ -113,6 +113,8 @@ Anything between a / and the end of a line is a commet, and will be ignored.
 Factory ignores spaces and tabs.
 </pre>
 <pre>
+Example one: Hello, world!
+
 /Hello, world!
 v>>>>>>>vv<< v<<<<<
 v>>>>>v<<<<<
