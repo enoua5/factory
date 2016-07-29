@@ -263,7 +263,7 @@ I>>>>>>v
 checkHeld
 loop
 {
-   <v>v
+   < v > v
    checkHeld
 }
 O
