@@ -111,14 +111,16 @@ To run a function, put the name of the function on its own line.
 Anything between a / and the end of a line is a commet, and will be ignored.
 
 Factory ignores spaces and tabs.
-
+</pre>
+<pre>
 - example one "HI program":
 /"HI" program ("Hello, world!" was to hard)
 BOOT
 v>>>>>>>vv<<v<<<<<v>>>>>v<<<<<v>>>>>>>vv<<v<<<<<v>>>>>>>vv<<v<<<<<v>>>>>v<<<<<v>>>>>>>vv<<<<<<<vv>>>>>v<<<<<v>>>>>v<<<<<v>>>>>v
 <<<<<v>>>>>>>vv<<<<<<<v
-v>>>>>>>vv<<v<<<<<v>>>>>v<<<<<v>>>>>>>vv<<v<<<<<v>>>>>>>vv<<v<<<<<v>>>>>v<<<<<v>>>>>>>vv<<<<<<<vv>>>>>v<<<<<v>>>>>v<<<<<v>>>>>>>vv<</pre><pre><vO
-
+v>>>>>>>vv<<v<<<<<v>>>>>v<<<<<v>>>>>>>vv<<v<<<<<v>>>>>>>vv<<v<<<<<v>>>>>v<<<<<v>>>>>>>vv<<<<<<<vv>>>>>v<<<<<v>>>>>v<<<<<v>>>>>>>vv<<vO
+</pre>
+<pre>
 -example two (I -> O program)
 /IO program
 DEF_checkHeld
