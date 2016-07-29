@@ -161,4 +161,14 @@ loop
    checkHeld
 }
 O
+
+
+
+- using Factory:
+   the file named "factory.html" is the compiler.
+   Up at the top are manual command (the square is the RAM: red=0, green=1)
+   The first text area is where the uncompiled factory code is to be written.
+   "run code" compiles the code into Javascript and runs it.
+   "compile code" compiles the code into Javascript without running.
+   The text area below "compiled code" is where the Javascript version of the code is placed after being compiled.
 </pre>
