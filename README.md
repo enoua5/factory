@@ -116,6 +116,7 @@ Factory ignores spaces and tabs.
 Example one: Hello, world!
 
 /Hello, world!
+BOOT
 v>>>>>>>vv<< v<<<<<
 v>>>>>v<<<<<
 v>>>>>>>vv<< v<<<<<
