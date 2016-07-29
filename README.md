@@ -119,7 +119,7 @@ v>>>>>>>vv<<v<<<<<v>>>>>v<<<<<v>>>>>>>vv<<v<<<<<v>>>>>>>vv<<v<<<<<v>>>>>v<<<<<v>
 <<<<<v>>>>>>>vv<<<<<<<v
 v>>>>>>>vv<<v<<<<<v>>>>>v<<<<<v>>>>>>>vv<<v<<<<<v>>>>>>>vv<<v<<<<<v>>>>>v<<<<<v>>>>>>>vv<<<<<<<vv>>>>>v<<<<<v>>>>>v<<<<<v>>>>>>>vv<<vO
 
--example two (I-->O program)
+-example two (I -> O program)
 /IO program
 DEF_checkHeld
    ^
