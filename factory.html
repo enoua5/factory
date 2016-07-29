@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="Factory.js"></script>
+<script>
+compiledCode="";
+function removeWhitespace(str)
+{
+	var output="";
+	for(i=0; i<str.length; i++)
+	{
+		if(str[i]!="	"&&str[i]!=" ")
+			output+=str[i];
+	}
+	return output;
+}
+function compileLine(line)
+{
+	var comp="";
+	//check comment
+	if(line[0]=='/')
+	{
+		comp="/";
+		comp+=line;
+		return comp+"\n";
+	}
+	//effectively else if
+	//check if not normal line
+	if(line[0]!='<'&&line[0]!='>'&&line[0]!='^'&&line[0]!='v'&&line[0]!='I'&&line[0]!='O'&&line[0]!='q')
+	{
+		if(line=="loop")
+		{
+			comp+="if(Factory.claw.readValue)\nwhile(Factory.claw.readValue)\n";
+			return comp;
+		}
+		else if(line=="loop{")
+		{
+			comp+="if(Factory.claw.readValue)\nwhile(Factory.claw.readValue){\n";
+			return comp;
+		}
+		else if(line=="eloop")
+		{
+			comp+="else\nwhile(!Factory.claw.readValue)\n";
+			return comp;
+		}
+		else if(line=="eloop{")
+		{
+			comp+="else\nwhile(!Factory.claw.readValue){\n";
+			return comp;
+		}
+		else if(line=="{")
+		{
+			return "{\n";
+		}
+		else if(line=="}")
+		{
+			return "}\n"
+		}
+		else if(line=="")
+		{
+			return "\n";
+		}
+		else
+		{
+			return line+"();\n";
+		}
+	}
+	//it's a standard line
+	for(c=0;c<line.length;c++)
+	{
+		if(line[c]=='<')
+		{
+			comp+="Factory.claw.move.left();";
+		}
+		else if(line[c]=='>')
+		{
+			comp+="Factory.claw.move.right();";
+		}
+		else if(line[c]=='^')
+		{
+			comp+="Factory.claw.read();";
+		}
+		else if(line[c]=='v')
+		{
+			comp+="Factory.claw.drop();";
+		}
+		else if(line[c]=='O')
+		{
+			comp+="Factory.stacks[5].output();";
+		}
+		else if(line[c]=='I')
+		{
+			comp+="Factory.stacks[6].input();";
+		}
+		else if(line[c]=='q')
+		{
+		    comp += "return 0;";
+		}
+	}
+	return comp+"\n";
+}
+function compile()
+{
+	document.getElementById("compiledCode").innerHTML="";
+	//factory object
+	compiledCode="Factory={\r\n\tclaw:\r\n\t{\r\n\t\treadValue:false,\r\n\t\tposition:0,\r\n\t\theldBox:null,\r\n\t\tmove:\r\n\t\t{\r\n\t\t\tleft:function()\r\n\t\t\t{\r\n\t\t\t\tif(Factory.claw.position>0)\r\n\t\t\t\t\tFactory.claw.position--;\r\n\t\t\t},\r\n\t\t\tright:function()\r\n\t\t\t{\r\n\t\t\t\tif(Factory.claw.position<8)\r\n\t\t\t\t\tFactory.claw.position++;\r\n\t\t\t}\r\n\t\t},\r\n\t\tread:function()\r\n\t\t{\r\n\t\t\tif(Factory.claw.heldBox==null)\r\n\t\t\t{\r\n\t\t\t\tFactory.claw.readValue=!Factory.claw.readValue;\r\n\t\t\t}\r\n\t\t\telse\r\n\t\t\t{\r\n\t\t\t\tFactory.claw.readValue=Factory.claw.heldBox;\r\n\t\t\t}\r\n\t\t},\r\n\t\tdrop:function()\r\n\t\t{\r\n\t\t\tif(Factory.claw.heldBox==null)\r\n\t\t\t{\r\n\t\t\t\t(Factory.stacks[Factory.claw.position]).pickUp();\r\n\t\t\t}\r\n\t\t\telse\r\n\t\t\t{\r\n\t\t\t\t(Factory.stacks[Factory.claw.position]).dropOff();\r\n\t\t\t}\r\n\t\t}\r\n\t},\r\n\tstacks:\r\n\t[\r\n\t\t\/\/production\r\n\t\t{\r\n\t\t\tresource:true,\r\n\t\t\tpickUp:function()\r\n\t\t\t{\r\n\t\t\t\tFactory.claw.heldBox=this.resource;\r\n\t\t\t},\r\n\t\t\tdropOff:function()\r\n\t\t\t{\r\n\t\t\t\tthis.resource=Factory.claw.heldBox;\r\n\t\t\t\tFactory.claw.heldBox=null;\r\n\t\t\t}\r\n\t\t},\r\n\t\t\/\/storage 1\r\n\t\t{\r\n\t\t\tstack:[],\r\n\t\t\tpickUp:function()\r\n\t\t\t{\r\n\t\t\t\tif(this.stack.length>0)\r\n\t\t\t\t{\r\n\t\t\t\t\tFactory.claw.heldBox=this.stack[this.stack.length-1];\r\n\t\t\t\t\tthis.stack.length--;\r\n\t\t\t\t}\r\n\r\n\t\t\t},\r\n\t\t\tdropOff:function()\r\n\t\t\t{\r\n\t\t\t\tthis.stack[this.stack.length]=Factory.claw.heldBox;\r\n\t\t\t\tFactory.claw.heldBox=null;\r\n\t\t\t}\r\n\t\t},\r\n\t\t\/\/storage 2\r\n\t\t{\r\n\t\t\tstack:[],\r\n\t\t\tpickUp:function()\r\n\t\t\t{\r\n\t\t\t\tif(this.stack.length>0)\r\n\t\t\t\t{\r\n\t\t\t\t\tFactory.claw.heldBox=this.stack[this.stack.length-1];\r\n\t\t\t\t\tthis.stack.length--;\r\n\t\t\t\t}\r\n\r\n\t\t\t},\r\n\t\t\tdropOff:function()\r\n\t\t\t{\r\n\t\t\t\tthis.stack[this.stack.length]=Factory.claw.heldBox;\r\n\t\t\t\tFactory.claw.heldBox=null;\r\n\t\t\t}\r\n\t\t},\r\n\t\t\/\/storage 3\r\n\t\t{\r\n\t\t\tstack:[],\r\n\t\t\tpickUp:function()\r\n\t\t\t{\r\n\t\t\t\tif(this.stack.length>0)\r\n\t\t\t\t{\r\n\t\t\t\t\tFactory.claw.heldBox=this.stack[this.stack.length-1];\r\n\t\t\t\t\tthis.stack.length--;\r\n\t\t\t\t}\r\n\r\n\t\t\t},\r\n\t\t\tdropOff:function()\r\n\t\t\t{\r\n\t\t\t\tthis.stack[this.stack.length]=Factory.claw.heldBox;\r\n\t\t\t\tFactory.claw.heldBox=null;\r\n\t\t\t}\r\n\t\t},\r\n\t\t\/\/trash\r\n\t\t{\r\n\t\t\tpickUp:function(){},\r\n\t\t\tdropOff:function()\r\n\t\t\t{\r\n\t\t\t\tFactory.claw.heldBox=null;\r\n\t\t\t}\r\n\t\t},\r\n\t\t\/\/output\r\n\t\t{\r\n\t\t\tstack:[],\r\n\t\t\tpickUp:function()\r\n\t\t\t{\r\n\t\t\t\tif(this.stack.length>0)\r\n\t\t\t\t{\r\n\t\t\t\t\tFactory.claw.heldBox=this.stack[this.stack.length-1];\r\n\t\t\t\t\tthis.stack.length--;\r\n\t\t\t\t}\r\n\r\n\t\t\t},\r\n\t\t\tdropOff:function()\r\n\t\t\t{\r\n\t\t\t\tthis.stack[this.stack.length]=Factory.claw.heldBox;\r\n\t\t\t\tFactory.claw.heldBox=null;\r\n\t\t\t},\r\n\t\t\toutput:function()\r\n\t\t\t{\r\n\t\t\t\tvar bins=[];\r\n\t\t\t\tvar message=\"\";\r\n\t\t\t\tfor(i=0;i<this.stack.length;i+=8)\r\n\t\t\t\t{\r\n\t\t\t\t\tbins[i\/8]=\"\";\r\n\t\t\t\t\tfor(j=0; j<8; j++)\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\tif(i+j<this.stack.length)\r\n\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\tif(this.stack[i+j]==true)\r\n\t\t\t\t\t\t\t\tbins[i\/8]+=\"1\";\r\n\t\t\t\t\t\t\tif(this.stack[i+j]==false)\r\n\t\t\t\t\t\t\t\tbins[i\/8]+=\"0\";\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t\tfor(i=0; i<bins.length; i++)\r\n\t\t\t\t{\r\n\t\t\t\t\tbins[i]=parseInt(bins[i],2);\r\n\t\t\t\t\tbins[i]=String.fromCharCode(bins[i]);\r\n\t\t\t\t\tmessage+=bins[i];\r\n\t\t\t\t}\r\n\t\t\t\talert(message);\r\n\t\t\t\tthis.stack=[];\r\n\t\t\t}\r\n\t\t},\r\n\t\t\/\/input\r\n\t\t{\r\n\t\t\tstack:[],\r\n\t\t\tpickUp:function()\r\n\t\t\t{\r\n\t\t\t\tif(this.stack.length>0)\r\n\t\t\t\t{\r\n\t\t\t\t\tFactory.claw.heldBox=this.stack[this.stack.length-1];\r\n\t\t\t\t\tthis.stack.length--;\r\n\t\t\t\t}\r\n\r\n\t\t\t},\r\n\t\t\tdropOff:function()\r\n\t\t\t{\r\n\t\t\t\tthis.stack[this.stack.length]=Factory.claw.heldBox;\r\n\t\t\t\tFactory.claw.heldBox=null;\r\n\t\t\t},\r\n\t\t\tinput:function()\r\n\t\t\t{\r\n\t\t\t\tthis.stack=[];\r\n\t\t\t\tvar msg=prompt();\r\n\t\t\t\tvar bin=[];\r\n\t\t\t\tfor(i=0; i<msg.length; i++)\r\n\t\t\t\t{\r\n\t\t\t\t\tbin[i]=msg[i];\r\n\t\t\t\t\tbin[i]=bin[i].charCodeAt();\r\n\t\t\t\t\tbin[i]=bin[i].toString(2);\r\n\t\t\t\t\twhile(bin[i].length<8)\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\tbin[i]=\"0\"+bin[i];\r\n\t\t\t\t\t}\r\n\t\t\t\t\tbin[i]=(bin[i]).split(\"\").reverse().join(\"\");\r\n\t\t\t\t}\r\n\t\t\t\tvar bins=bin.reverse().join(\"\");\r\n\t\t\t\tfor(i=0;i<bins.length;i++)\r\n\t\t\t\t{\r\n\t\t\t\t\tif(bins[i]==\"1\")\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\tthis.stack[this.stack.length]=true;\r\n\t\t\t\t\t}\r\n\t\t\t\t\telse\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\tthis.stack[this.stack.length]=false;\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t},\r\n\t\t\/\/invert\r\n\t\t{\r\n\t\t\tonDeck:null,\r\n\t\t\tpickUp:function()\r\n\t\t\t{\r\n\t\t\t\tFactory.claw.heldBox=this.onDeck;\r\n\t\t\t\tthis.onDeck=null;\r\n\t\t\t},\r\n\t\t\tdropOff:function()\r\n\t\t\t{\r\n\t\t\t\tthis.onDeck=!Factory.claw.heldBox;\r\n\t\t\t\tFactory.claw.heldBox=null;\r\n\t\t\t}\r\n\t\t},\r\n\t\t\/\/and\r\n\t\t{\r\n\t\t\tstack:[],\r\n\t\t\tpickUp:function()\r\n\t\t\t{\r\n\t\t\t\tif(this.stack.length>0)\r\n\t\t\t\t{\r\n\t\t\t\t\tFactory.claw.heldBox=this.stack[this.stack.length-1];\r\n\t\t\t\t\tthis.stack.length--;\r\n\t\t\t\t}\r\n\t\t\t},\r\n\t\t\tdropOff:function()\r\n\t\t\t{\r\n\t\t\t\tthis.stack[this.stack.length]=Factory.claw.heldBox;\r\n\t\t\t\tFactory.claw.heldBox=null;\r\n\t\t\t\tif(this.stack.length==2)\r\n\t\t\t\t{\r\n\t\t\t\t\tif(this.stack[0]&&this.stack[1])\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\tthis.stack=[true];\r\n\t\t\t\t\t}\r\n\t\t\t\t\telse\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\tthis.stack=[false];\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t}\t\t\r\n\t\t}\r\n\t]\r\n}\n";
+	var code=removeWhitespace(document.getElementById("codebox").value);
+	code=code.split("\n");
+	var i=0;
+	while(i<code.length&&code[i]!="BOOT")
+	{
+		if(code[i][0]=='D'&&code[i][1]=='E'&&code[i][2]=='F'&&code[i][3]=='_')
+		{
+			compiledCode+="function ";
+			for(n=4; n<code[i].length; n++)
+			{
+				compiledCode+=code[i][n];
+			}
+			compiledCode+="()\n{\n";
+		}
+		else if(code[i][0]=='E'&&code[i][1]=='N'&&code[i][2]=='D')
+		{
+			compiledCode+="}\n";
+		}
+		else
+		{
+			compiledCode+=compileLine(code[i]);
+		}
+		i++;
+	}
+	i++;
+	while(i<code.length)
+	{
+		compiledCode+=compileLine(code[i]);
+		i++;
+	}
+	document.getElementById("compiledCode").innerHTML=compiledCode;
+}
+function run()
+{
+	compile();
+	eval(compiledCode);
+}
+</script>
+</head>
+<body>
+<button onClick="Factory.claw.move.left()"><</button>
+<button onClick="Factory.claw.drop()">v</button>
+<button onClick="Factory.claw.move.right()">></button>
+<button onClick="Factory.claw.read(); if(Factory.claw.readValue){document.getElementById('light').style.background='green'}else{document.getElementById('light').style.background='red'}">^</button>
+<button onClick="Factory.stacks[6].input()">input</button>
+<button onClick="Factory.stacks[5].output()">output</button>
+<div id="light" style="width: 20px; height: 20px; background: red; display: inline-block"></div>
+<br>
+<br>
+<br>
+<br>
+<textarea rows="30" cols="100" id="codebox"></textarea>
+<br>
+<button onClick="run();">run code</button>
+<button onClick="compile();">compile code</button>
+<br>
+<span>compiled code</span>
+<br>
+<textarea id="compiledCode">
+
+</textarea>
+</body>
+</html>
