@@ -165,9 +165,8 @@ loop
    checkHeld
 }
 O
-
-
-
+</pre>
+<pre>
 - using Factory:
    the file named "factory.html" is the compiler.
    Up at the top are manual command (the square is the RAM: red=0, green=1)
