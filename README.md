@@ -94,6 +94,7 @@ DEF:
    def is run before the BOOT command, and defines a function.
    it is used by putting on its own line: DEF_
    followed by the name of the function.
+   (a function name cannot start with "q", "I", or "O")
    On the following lines, goes the functions code, which is run when the function is called.
    The end of the function comes when it finds the following keyword on its own line: END
 q:
