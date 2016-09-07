@@ -56,7 +56,7 @@ Invertor:
    When a bit is placed in this room, it is changed into the opposite type of bit.
    After a bit is dropped off here, the new inverted bit can be picked up.
    WARNING: if there is a bit in the invertor, ready to be picked up, it will be destroyed if another one is put into the machine.
-and:
+And:
    This is the factory's other machine.
    Bits can be picked up and set down om this machine, mach like in the memory rooms.
    However, if two bits are in this room at the same time the machine will turn on.
