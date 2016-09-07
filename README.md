@@ -70,7 +70,7 @@ And:
 The claw has very basic functions, as follows:
 
 If the claw has the command BOOT
-   it will turn on nd begin running each of the following command in order.
+   it will turn on and begin running each of the following command in order.
    the boot command must be on its own line
 If the claw has the command <
    it will move left one room (unless it's in the leftmost room)
