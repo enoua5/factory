@@ -1,4 +1,4 @@
-# factory
+# Factory
 Factory is an esoteric programming language that compiles into Javascript
 
 If anyone can figure out how to make a Factory quine, I would be VERY impressed
