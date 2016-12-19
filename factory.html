@@ -96,6 +96,8 @@ function compileLine(line)
 		{
 		    comp += "return 0;";
 		}
+		else if(line[c]=='/')
+			comp+="//";
 	}
 	return comp+"\n";
 }
